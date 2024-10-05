@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Expense Splitter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e5c9f2;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 0 0 2px black;
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 28px;
+            text-align: center;
+        }
+        label, input, button {
+            display: block;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        input {
+            -moz-appearance: textfield;
+            border: 2px solid black;
+            border-radius: 25px;
+            padding: 10px 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 25px;
+            background-color: #d1a4d7;
+            color: white;
+            border: 2px solid black;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #c190c6;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Splitter</h1>
+        
+        <form onsubmit="calculateSplit(); return false;">
+            <label for="angelIncome">Angel's Income</label>
+            <input type="text" id="angelIncome" required>
+
+            <label for="lilyIncome">Lily's Income</label>
+            <input type="text" id="lilyIncome" required>
+
+            <label for="totalExpenses">Our Expenses</label>
+            <input type="text" id="totalExpenses" required>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateSplit() {
+            const angelIncome = parseFloat(document.getElementById('angelIncome').value);
+            const lilyIncome = parseFloat(document.getElementById('lilyIncome').value);
+            const totalExpenses = parseFloat(document.getElementById('totalExpenses').value);
+
+            if (isNaN(angelIncome) || isNaN(lilyIncome) || isNaN(totalExpenses) || (angelIncome + lilyIncome) === 0) {
+                document.getElementById('result').innerText = 'Please enter valid incomes and expenses.';
+                return;
+            }
+
+            const sharedIncome = angelIncome + lilyIncome;
+            const angelShareOfIncome = angelIncome / sharedIncome;
+            const lilyShareOfIncome = lilyIncome / sharedIncome;
+            const angelPayment = totalExpenses * angelShareOfIncome;
+            const lilyPayment = totalExpenses * lilyShareOfIncome;
+            const angelPercentage = angelShareOfIncome * 100;
+            const lilyPercentage = lilyShareOfIncome * 100;
+
+            document.getElementById('result').innerHTML = `
+                Angel should pay $${angelPayment.toFixed(2)}, which is ${angelPercentage.toFixed(2)}% of our total expenses.<br>
+                Lily should pay $${lilyPayment.toFixed(2)}, which is ${lilyPercentage.toFixed(2)}% of our total expenses.
+            `;
+        }
+    </script>
+</body>
+</html>
